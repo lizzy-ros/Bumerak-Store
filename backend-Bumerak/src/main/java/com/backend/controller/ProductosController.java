@@ -5,6 +5,7 @@ import com.backend.model.ShoppingList;
 import com.backend.repository.ProductoRepository;
 import lombok.AllArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("*")
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class ProductosController {
 
 
     private final ProductoRepository productoRepository;
     @GetMapping("productos")
     public List<Productos> findAll() {
-        return productoRepository.findAll();
+        log.info("REST request to finAll productos");
+        return this.productoRepository.findAll();
     }
 
 

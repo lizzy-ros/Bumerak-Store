@@ -36,7 +36,8 @@ public class Main {
 
 		//Esta es de producto
 		Productos prod1 = new Productos(null, "teclado", "teclado de oro", 10.3, true, Category.OPCION1, true,"img", shoppingList1 );
-		repoProduco.saveAll(List.of(prod1));
+		Productos prod2 = new Productos(null, "teclado", "teclado de oro", 10.3, true, Category.OPCION1, true,"img", shoppingList1 );
+		repoProduco.saveAll(List.of(prod1,prod2));
 
 		//Esta es de ShippingAddres = direccion de envio
 		ShippingAddres address1 = new ShippingAddres(null, "usuario1", "calle1", "madrid", "28025", "madrid", user1);

@@ -2,7 +2,7 @@
   <div class="raw">
     <div class="col">
       <h1 class="mt-5 mb-5">Listado de Productos</h1>
-
+      <button class="btn btn-secondary mb-5" routerLink="/productos/create">Crear Productos</button>
       @if (showDeletedBookMessage) {
       <ngb-alert type="success" (closed)="hideDeleteBookMessage()">Libro borrado correctamente</ngb-alert>
       }
@@ -35,9 +35,9 @@
               </a>
             </th>
             <td>
-              <button class="btn btn-info btn-sm" [routerLink]="['/productos/', producto.id]">Ver</button>
-              <button class="btn btn-success ms-2 btn-sm" [routerLink]="['/productos/', producto.id, 'update']">Editar</button>
-              <button class="btn btn-warning ms-2 btn-sm" [routerLink]="['/productos/', producto.id, 'reserve']">comprar</button><!--falta crear enrutado y componente-->
+              <button class="btn btn-info btn-sm" [routerLink]="['/productos/', producto.id, 'detail']">Ver</button>
+              <button class="btn btn-success ms-2 btn-sm" [routerLink]="['productos/'+ producto.id+ 'update']">Editar</button>
+              <button class="btn btn-warning ms-2 btn-sm" [routerLink]="['productos/', producto.id, 'reserve']">comprar</button><!--falta crear enrutado y componente-->
               <button class="btn btn-danger ms-2 btn-sm" (click)="delete(producto)">Borrar</button>
             </td>
           </tr>

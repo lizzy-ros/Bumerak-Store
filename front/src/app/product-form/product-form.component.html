@@ -22,18 +22,29 @@
           <input type="number" class="form-control" id="price" formControlName="price" step="0.01">
           <label for="price">Precio en euros (€)</label>
         </div>
-        <div class="form-floating">
-          <select class="form-select" id="proveedor" formControlName="proveedor">
-          <option selected>Open this select menu</option>
-         @for (proveedores of proveedor; track proveedores) {
-          <option>{{proveedores.fullName}}</option>
+        <div class="form-floating mb-3">
+
+          <select class="form-select" id="category" formControlName="category">
+         @for (type of category; track type) {
+          <option [value]="type">{{ type }}</option>
          }
           </select>
-          <label for="proveedor">selesciona un proveedor</label>
-          </div>
+          <label for="category">selesciona un Category</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" id="stock" formControlName="stock" step="0.01">
+          <label for="stock">Stock</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="description" formControlName="description" >
+          <label for="description">Description</label>
+        </div>
+        
 
         @if (isUpdate) {
-          <button class="btn btn-success" type="submit">Actualizar</button>
+          <button class="btn btn-success"  type="submit">Actualizar</button>
         } @else {
           <button class="btn btn-success" type="submit">Crear</button>
         }

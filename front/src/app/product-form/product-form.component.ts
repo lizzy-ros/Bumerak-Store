@@ -1,7 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Producto } from '../model/productos.model';
+import { Category, Producto } from '../model/productos.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Supplier } from '../model/Supplier.model';
 
@@ -27,22 +27,24 @@ export class ProductFormComponent implements OnInit {
 
     stock: [0],
 
-    //category: new Category[],
+    category:[Category.OPCION1],
 
     availableStock: [false],
 
     imgProduct: [''],
 
-    /*proveedor: this.fb.group({
+    proveedor: this.fb.group({
       id:[0],
       fullName:[''],
       
-    })*/
+    })
  });
 
    isUpdate: boolean = false;
    proveedor: Supplier[] = []; 
-
+   catego= Category ; 
+category: any;
+type: any;
   constructor( private fb: FormBuilder,
                private httpClient: HttpClient,
                private router: Router,
@@ -50,8 +52,7 @@ export class ProductFormComponent implements OnInit {
  }
 
   ngOnInit(): void { 
-    this.httpClient.get<Supplier[]>('http://localhost:8080/proveedor')
-    .subscribe(proveedor => this.proveedor =proveedor);
+    this
 
     this.activatedRoute.params.subscribe(params => {
       const id = params['id'];
@@ -64,10 +65,10 @@ export class ProductFormComponent implements OnInit {
           description: producFrom.description,
           price: producFrom.price,
           stock: producFrom.stock,
-          //categoria
+          category: producFrom.category,
           availableStock: producFrom.availableStock,
           imgProduct: producFrom.imgProduct,
-
+          proveedor: producFrom.proveedor,  
         });
 
         this.isUpdate = true;

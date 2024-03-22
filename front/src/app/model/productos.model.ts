@@ -1,17 +1,23 @@
+import { Supplier } from "./Supplier.model";
+
+
 export interface Producto{
-    id: number,
+    id: number;
 
-    name: string,
+    name: string;
 
-    description: string,
+    description: string;
 
-    price: number,
+    price: number;
+    stock: number;
 
-    stock: number,
+    //category: new Category[];
 
-    //category: new Category[],
+    availableStock: boolean;
 
-    availableStock: boolean,
-
-    imgProduct: string,
+    imgProduct: string;
+    
+     
+    proveedor: Supplier;
 }
+

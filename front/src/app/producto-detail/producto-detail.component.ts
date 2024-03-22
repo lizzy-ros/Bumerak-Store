@@ -1,12 +1,12 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Producto } from '../model/productos.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-producto-detail',
   standalone: true,
-  imports: [HttpClientModule],
+  imports: [HttpClientModule,RouterLink],
   templateUrl: './producto-detail.component.html',
   styleUrl: './producto-detail.component.css'
 })

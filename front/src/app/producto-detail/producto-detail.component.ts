@@ -25,9 +25,9 @@ export class ProductoDetailComponent implements OnInit {
 
       if(!id) return;
 
-      const url = 'http://localhost:8080/productos/' + id;
+      const url = 'http://localhost:8080/productos/' + id ;
 
-      this.httpClient.get<Producto>(url).subscribe( b => this.productos =b);
+      this.httpClient.get<Producto>(url).subscribe( b => this.productos = b);
 
     });
   }

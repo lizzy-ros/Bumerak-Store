@@ -1,65 +1,50 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Category, Producto } from '../model/productos.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Supplier } from '../model/Supplier.model';
 
-
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [ReactiveFormsModule, HttpClientModule ],
+  imports: [ReactiveFormsModule, HttpClientModule,RouterLink ],
   templateUrl:'./product-form.component.html',
   styleUrl: './product-form.component.css'
 })
 export class ProductFormComponent implements OnInit {
+ 
   
-   producFrom = this.fb.group({
+  producForm= new FormGroup ({
+    id: new FormControl<number>(0),
+    name:new FormControl<string>(''),
+    description: new FormControl<string>(''),
+    price: new FormControl<number>(0.0),
+    stock: new FormControl<number>(0),
+    category: new FormControl<Category>(Category.OPCION1),
+    availableStock: new FormControl<boolean>(false),
+    imgProduct: new FormControl<string>(''),
+    proveedor: new FormControl(),
+  });
 
-    id: [0],
+    isUpdate : boolean = false;
+    proveedors: Supplier[] = [];
+    category = Object.values(Category);
 
-    name: [''],
 
-    description: [''],
 
-    price: [0],
+    constructor( private httpCliente: HttpClient,
+                 private router: Router, 
+                 private fb: FormBuilder,
+                 private activatedRouter: ActivatedRoute){}
 
-    stock: [0],
-
-    category:[Category.OPCION1],
-
-    availableStock: [false],
-
-    imgProduct: [''],
-
-    proveedor: this.fb.group({
-      id:[0],
-      fullName:[''],
-      
-    })
- });
-
-   isUpdate: boolean = false;
-   proveedor: Supplier[] = []; 
-   catego= Category ; 
-category: any;
-type: any;
-  constructor( private fb: FormBuilder,
-               private httpClient: HttpClient,
-               private router: Router,
-               private activatedRoute: ActivatedRoute ){             
- }
-
-  ngOnInit(): void { 
-    this
-
-    this.activatedRoute.params.subscribe(params => {
+   ngOnInit(): void {
+    this.activatedRouter.params.subscribe(params => {
       const id = params['id'];
       if(!id) return;
-        this.httpClient.get<Producto>('http://localhost:8080/productos'+ id).subscribe(producFrom =>{
+        this.httpCliente.get<Producto>('http://localhost:8080/productos/'+ id).subscribe(producFrom =>{
 
-          this.producFrom.reset({
+          this.producForm.reset({
           id: producFrom.id,
           name: producFrom.name,
           description: producFrom.description,
@@ -71,36 +56,36 @@ type: any;
           proveedor: producFrom.proveedor,  
         });
 
-        this.isUpdate = true;
+        this.isUpdate =true;
 
       });
-    });  
-  }
+    });
+ }
+ 
 
   save () {
-    const productos: Producto = this.producFrom.value as Producto;
+    const productos: Producto = this.producForm.value as Producto;
     console.log(productos);
     
     if (this.isUpdate) {
     const url = 'http://localhost:8080/productos/' + productos.id;
-    this.httpClient.put<Producto>(url, productos).subscribe(producBacken => {
+    this.httpCliente.put<Producto>(url, productos).subscribe(producBacken => {
     this.router.navigate(['/productos', producBacken.id, 'detail']);
     });
     
     } else {
     const url = 'http://localhost:8080/productos';
-    this.httpClient.post<Producto>(url, productos).subscribe(producBacken => {
+    this.httpCliente.post<Producto>(url, productos).subscribe(producBacken => {
     this.router.navigate(['/productos', producBacken.id, 'detail']);
     });
     }
   }
-} 
-  
-  
-  
-   
- 
+  compareObjects(o1: any, o2: any): boolean {
+    // console.log("Comparando objetos: ", o1, o2);
 
-
-
-
+    if(o1 && o2) {
+      return o1.id === o2.id;
+    }
+    return o1 === o2;
+  }
+}

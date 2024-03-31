@@ -40,5 +40,4 @@ public class Productos {
     @ManyToOne
     private ShoppingList shoppingList;
 
-
 }

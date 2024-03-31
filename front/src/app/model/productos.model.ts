@@ -2,7 +2,7 @@ import { Supplier } from "./Supplier.model";
 
 
 export interface Producto{
-    categoria: any;
+   
     id: number;
 
     name: string;
@@ -10,6 +10,7 @@ export interface Producto{
     description: string;
 
     price: number;
+
     stock: number;
 
     category: Category;
@@ -18,7 +19,6 @@ export interface Producto{
 
     imgProduct: string;
     
-     
     proveedor: Supplier;
 }
 

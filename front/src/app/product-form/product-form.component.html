@@ -4,12 +4,12 @@
     <div class="col">
 
       @if (isUpdate) {
-        <h1 class="mt-5 mb-5"> actualizar  el producto  con el ID {{producFrom.get('id')?.value}}</h1>
+        <h1 class="mt-5 mb-5"> actualizar  el producto  con el ID {{producForm.get('id')?.value}}</h1>
       }@else {
         <h1 class="mt-5 mb-5">Crear Un Producto</h1>
       }
       
-      <form [formGroup]="producFrom" (ngSubmit)="save()">
+      <form [formGroup]="producForm" (ngSubmit)="save()">
 
         <input type="hidden" formControlName="id">
 
@@ -22,11 +22,17 @@
           <input type="number" class="form-control" id="price" formControlName="price" step="0.01">
           <label for="price">Precio en euros (€)</label>
         </div>
+
+        <div class="form-floating mb-3" formGroupName="proveedor">
+          <input type="text" class="form-control" id=" fullName" formControlName=" fullName" >
+          <label for="fullName"> Proveedor</label>
+        </div>
+
         <div class="form-floating mb-3">
 
-          <select class="form-select" id="category" formControlName="category">
-         @for (type of category; track type) {
-          <option [value]="type">{{ type }}</option>
+          <select class="form-select" id="category" formControlName="category" [compareWith]="compareObjects">
+         @for (category of category; track category) {
+          <option [ngValue]="category">{{category}}</option>
          }
           </select>
           <label for="category">selesciona un Category</label>
@@ -41,14 +47,17 @@
           <input type="text" class="form-control" id="description" formControlName="description" >
           <label for="description">Description</label>
         </div>
-        
+
+        <div class="input-group">
+          <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+          <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>
+        </div>
 
         @if (isUpdate) {
           <button class="btn btn-success"  type="submit">Actualizar</button>
         } @else {
           <button class="btn btn-success" type="submit">Crear</button>
         }
-
 
       </form>
     </div>

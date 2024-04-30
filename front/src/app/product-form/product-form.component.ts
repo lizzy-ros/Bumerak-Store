@@ -30,8 +30,8 @@ export class ProductFormComponent implements OnInit {
     isUpdate : boolean = false;
     proveedors: Supplier[] = [];
     category = Object.values(Category);
-
-
+    img : File |undefined;
+    imgPreview : string | undefined;
 
     constructor( private httpCliente: HttpClient,
                  private router: Router, 
@@ -61,7 +61,18 @@ export class ProductFormComponent implements OnInit {
       });
     });
  }
- 
+ onFileChange(event:Event){
+
+  let target =event.target as HTMLInputElement;
+  if( target.files === null || target.files.length == 0){
+    return;
+  }
+  this.img = target.files[0];
+/* previsualizar la img*/
+  let reader = new FileReader();
+  reader.onload = event => this.imgPreview = reader.result as string;
+  reader.readAsDataURL(this.img);
+ }
 
   save () {
     const productos: Producto = this.producForm.value as Producto;

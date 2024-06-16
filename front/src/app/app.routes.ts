@@ -3,6 +3,8 @@ import { ProductosComponent } from './productos-list/productos-list.component';
 import { ProductoDetailComponent } from './producto-detail/producto-detail.component';
 import { HomeComponent } from './home/home.component';
 import { ProductFormComponent } from './product-form/product-form.component';
+import { Component } from '@angular/core';
+import { QuieneSomosComponent } from './quiene-somos/quiene-somos.component';
 
 export const routes: Routes = [
 
@@ -26,5 +28,9 @@ export const routes: Routes = [
         path:'productos/:id/update',
         component: ProductFormComponent
     },
+    {
+        path:'quieneSomos',
+        component: QuieneSomosComponent
+    }
     
 ];

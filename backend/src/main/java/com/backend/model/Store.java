@@ -6,27 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
-import java.time.LocalDate;
+
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "pedidos")
-public class Orderss {
+@Table(name = "Tienda")
+public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
+    @Column(nullable = false)
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private User user;
-
+    private String location;
 
 }

@@ -22,14 +22,18 @@ public class ShoppingList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate date;
+    @Column(nullable = false)
+    private Integer quantity;
 
-    private Double total;
-
-    private State state;
+    @Column(nullable = false, precision = 10)
+    private Double price;
 
     @ManyToOne
-    private User user;
+    @JoinColumn(name = "order_id")
+    private Orderss orderss;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Productos productos;
 
 }

@@ -15,9 +15,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
     private final UserRepository repo;
+
     @GetMapping("user")
     private List<User> findAll(){
-
         return repo.findAll();
     }
 

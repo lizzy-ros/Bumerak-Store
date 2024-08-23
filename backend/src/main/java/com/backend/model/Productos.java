@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 
 import lombok.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,25 +20,25 @@ import java.util.List;
 @Setter
 @ToString
 @Table(name = "productoss")
+@Builder
 public class Productos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private String description;
 
+    @Column(nullable = false, precision = 10)
     private Double price;
 
-    private Boolean stock;
-
-    private Category category;
-
-    private Boolean availableStock;
-
     private String imgProduct;
+
     @ManyToOne
-    private ShoppingList shoppingList;
+    @JoinColumn(name = "store_id")
+    private Store store;
+
 
 }

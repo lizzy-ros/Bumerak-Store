@@ -1,8 +1,6 @@
 package com.backend.controller;
 
 import com.backend.model.Orderss;
-import com.backend.model.ShippingAddres;
-import com.backend.model.ShoppingList;
 import com.backend.repository.OrderssRepository;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,9 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Category, Producto } from '../model/productos.model';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Producto } from '../model/productos.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Supplier } from '../model/Supplier.model';
+
 
 @Component({
   selector: 'app-product-form',
@@ -20,73 +20,70 @@ export class ProductFormComponent implements OnInit {
     name:new FormControl<string>(''),
     description: new FormControl<string>(''),
     price: new FormControl<number>(0.0),
-    stock: new FormControl<number>(0),
-    category: new FormControl<Category>(Category.OPCION1),
-    availableStock: new FormControl<boolean>(false),
-    imgProduct: new FormControl<string>(''),
-    proveedor: new FormControl(),
+    photoUrl: new FormControl<string>(''),
   });
 
+    product: Producto | undefined;
     isUpdate : boolean = false;
-    proveedors: Supplier[] = [];
-    category = Object.values(Category);
-    img : File |undefined;
-    imgPreview : string | undefined;
+    photoFile : File |undefined;
+    photoPreview : string | undefined;
 
     constructor( private httpCliente: HttpClient,
                  private router: Router, 
-                 private fb: FormBuilder,
                  private activatedRouter: ActivatedRoute){}
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.activatedRouter.params.subscribe(params => {
       const id = params['id'];
       if(!id) return;
-        this.httpCliente.get<Producto>('http://localhost:8080/productos/'+ id).subscribe(producFrom =>{
 
-          this.producForm.reset({
-          id: producFrom.id,
-          name: producFrom.name,
-          description: producFrom.description,
-          price: producFrom.price,
-          stock: producFrom.stock,
-          category: producFrom.category,
-          availableStock: producFrom.availableStock,
-          imgProduct: producFrom.imgProduct,
-          proveedor: producFrom.proveedor,  
+        this.httpCliente.get<Producto>('http://localhost:8080/productos/'+ id).subscribe(product =>{
+
+          this.producForm.reset(product);
+          this.isUpdate =true;
+          this.product =product; 
         });
-
-        this.isUpdate =true;
-
-      });
     });
- }
+  }
  onFileChange(event:Event){
 
-  let target =event.target as HTMLInputElement;
+  let target =event.target as HTMLInputElement; // este target es el input de tipo file donde se carga el archivo
+  
   if( target.files === null || target.files.length == 0){
-    return;
+    return;// no se procesa ningún archivo
   }
-  this.img = target.files[0];
-/* previsualizar la img*/
+
+  //guardar la img para enviarlo en el save()
+  this.photoFile = target.files[0];
+
+  /* previsualizar la img por pantalla*/
   let reader = new FileReader();
-  reader.onload = event => this.imgPreview = reader.result as string;
-  reader.readAsDataURL(this.img);
+  reader.onload = event => this.photoPreview  = reader.result as string;
+  reader.readAsDataURL(this.photoFile);
  }
 
   save () {
-    const productos: Producto = this.producForm.value as Producto;
-    console.log(productos);
-    
+
+    let formData =new FormData();
+    formData.append('id', this.producForm.get('id')?.value?.toString() ?? '0');
+    formData.append('name', this.producForm.get('name')?.value ?? '');    
+    formData.append('description', this.producForm.get('description')?.value ?? '');
+    formData.append('price', this.producForm.get('price')?.value?.toString() ?? '');
+    formData.append('photoUrl', this.producForm.get('photoUrl')?.value ?? ''); 
+
+    if(this.photoFile){
+      formData.append("photo", this.photoFile);
+    }
+
     if (this.isUpdate) {
-    const url = 'http://localhost:8080/productos/' + productos.id;
-    this.httpCliente.put<Producto>(url, productos).subscribe(producBacken => {
-    this.router.navigate(['/productos', producBacken.id, 'detail']);
+    const url = 'http://localhost:8080/productos/' + this.product?.id;
+    this.httpCliente.put<Producto>(url,formData).subscribe(producBacken => {
+    this.router.navigate(['/productos', producBacken, 'detail']);
     });
     
     } else {
     const url = 'http://localhost:8080/productos';
-    this.httpCliente.post<Producto>(url, productos).subscribe(producBacken => {
+    this.httpCliente.post<Producto>(url,formData).subscribe(producBacken => {
     this.router.navigate(['/productos', producBacken.id, 'detail']);
     });
     }

@@ -3,11 +3,13 @@ package com.backend.controller;
 import com.backend.model.Productos;
 import com.backend.model.ShoppingList;
 import com.backend.repository.ProductoRepository;
+import com.backend.service.FileService;
 import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,9 @@ import java.util.Optional;
 public class ProductosController {
 
 
-    private final ProductoRepository productoRepository;
+    private ProductoRepository productoRepository;
+    private FileService fileService;
+
     @GetMapping("productos")
     public List<Productos> findAll() {
         log.info("REST request to finAll productos");
@@ -39,9 +43,12 @@ public class ProductosController {
     }
 
     @PostMapping("productos")
-    private ResponseEntity<Productos> create(@RequestBody Productos productos){
-        Productos saveProductos = productoRepository.save(productos);
-        return ResponseEntity.ok(saveProductos);
+        private Productos create(@RequestParam("photo")MultipartFile file, Productos productos){
+            System.out.println(file.getOriginalFilename());
+            System.out.println(productos.getName());
+            productos.setPhotoUrl(fileService.store(file));
+
+        return  this.productoRepository.save(productos);
     }
 
     @PutMapping("productos/{id}")

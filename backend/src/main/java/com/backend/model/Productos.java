@@ -34,7 +34,7 @@ public class Productos {
     @Column(nullable = false, precision = 10)
     private Double price;
 
-    private String imgProduct;
+    private String photoUrl;
 
     @ManyToOne
     @JoinColumn(name = "store_id")

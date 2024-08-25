@@ -1,7 +1,17 @@
 
 <div class="container">
   <div class="raw">
-    <div class="col">
+    <div class="col-4">
+      @if (photoPreview) {
+        <h2 class="my-5">Previsualización foto</h2>
+        <img class="img-fluid" [src]="photoPreview">
+      }
+      @if (!photoPreview && product?.photoUrl) {
+        <h2 class="my-5">Previsualización foto</h2>
+        <img class="img-fluid" [src]="'http://localhost:8080/files/' + product?.photoUrl">
+      }
+    </div>
+    <div class="">
 
       @if (isUpdate) {
         <h1 class="mt-5 mb-5"> actualizar  el producto  con el ID {{producForm.get('id')?.value}}</h1>
@@ -23,25 +33,7 @@
           <label for="price">Precio en euros (€)</label>
         </div>
 
-        <div class="form-floating mb-3" formGroupName="proveedor">
-          <input type="text" class="form-control" id=" fullName" formControlName=" fullName" >
-          <label for="fullName"> Proveedor</label>
-        </div>
 
-        <div class="form-floating mb-3">
-
-          <select class="form-select" id="category" formControlName="category" [compareWith]="compareObjects">
-         @for (category of category; track category) {
-          <option [ngValue]="category">{{category}}</option>
-         }
-          </select>
-          <label for="category">selesciona un Category</label>
-        </div>
-
-        <div class="form-floating mb-3">
-          <input type="number" class="form-control" id="stock" formControlName="stock" step="0.01">
-          <label for="stock">Stock</label>
-        </div>
 
         <div class="form-floating mb-3">
           <input type="text" class="form-control" id="description" formControlName="description" >
@@ -49,19 +41,15 @@
         </div>
 
         <div class="input-group">
-          <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+          <input type="file" class="form-control" id="photo" (change)="onFileChange($event)">
           <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>
         </div>
-
         @if (isUpdate) {
           <button class="btn btn-success"  type="submit">Actualizar</button>
         } @else {
           <button class="btn btn-success" type="submit">Crear</button>
-        }
-
+        } 
       </form>
     </div>
-
   </div>
-
 </div>

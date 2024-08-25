@@ -13,16 +13,8 @@ export interface Producto{
 
     stock: number;
 
-    category: Category;
-
-    availableStock: boolean;
-
-    imgProduct: string;
-    
-    proveedor: Supplier;
+    photoUrl: string;
 }
 
-export enum Category{
-    OPCION1, OPCION2, OPCION3,OPCION4
-}
+
 

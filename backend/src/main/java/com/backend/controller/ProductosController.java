@@ -1,19 +1,16 @@
 package com.backend.controller;
 
 import com.backend.model.Productos;
-import com.backend.model.ShoppingList;
 import com.backend.repository.ProductoRepository;
 import com.backend.service.FileService;
 import lombok.AllArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -21,48 +18,58 @@ import java.util.Optional;
 @Slf4j
 public class ProductosController {
 
-
     private ProductoRepository productoRepository;
     private FileService fileService;
 
     @GetMapping("productos")
     public List<Productos> findAll() {
-        log.info("REST request to finAll productos");
+        log.info("REST request to findAll productos");
         return this.productoRepository.findAll();
     }
 
-
     @GetMapping("productos/{id}")
-    private ResponseEntity<Productos> finById(@PathVariable Long id){
-        Optional<Productos> productos= productoRepository.findById(id);
-        if (productos.isPresent() ) {
+    private ResponseEntity<Productos> findById(@PathVariable Long id) {
+        Optional<Productos> productos = productoRepository.findById(id);
+        if (productos.isPresent()) {
             return ResponseEntity.ok(productos.get());
-        }else {
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping("productos")
-        private Productos create(@RequestParam("photo")MultipartFile file, Productos productos){
-            System.out.println(file.getOriginalFilename());
-            System.out.println(productos.getName());
-            productos.setPhotoUrl(fileService.store(file));
 
-        return  this.productoRepository.save(productos);
+    @PostMapping("productos")
+    public Productos create(@RequestParam(value = "photo", required = false) MultipartFile file, Productos productos) {
+        if (file != null) {
+            String fileName = fileService.store(file);
+            productos.setPhotoUrl(fileName);
+        } else {
+            productos.setPhotoUrl("avatar.png");
+        }
+        return this.productoRepository.save(productos);
     }
 
     @PutMapping("productos/{id}")
-    private ResponseEntity<Productos> update(@RequestBody Productos productos,@PathVariable Long id){
-        if (productos.getId() == null){
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> updateProduct(
+            @PathVariable Long id,
+            Productos productos,
+            @RequestParam(value = "photo", required = false) MultipartFile file) {
+        if (!this.productoRepository.existsById(id))
+            return ResponseEntity.notFound().build();
+
+        if (file != null && !file.isEmpty()) {
+            String fileName = fileService.store(file);
+            productos.setPhotoUrl(fileName);
         }
-        Productos saveProductos = productoRepository.save(productos);
-        return ResponseEntity.ok(saveProductos);
+        return ResponseEntity.ok(this.productoRepository.save(productos));
     }
 
-    @DeleteMapping("productos/{id}")
-    public ResponseEntity<Productos> deleteById(@PathVariable Long id) {
-        productoRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/productos/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (productoRepository.existsById(id)) {
+            productoRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

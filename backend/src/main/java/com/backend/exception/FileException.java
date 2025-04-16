@@ -1,7 +1,8 @@
-package com.backend.service;
+package com.backend.exception;
 
 public class FileException extends RuntimeException {
     public  FileException(String message){
+
         super(message);
     }
 }

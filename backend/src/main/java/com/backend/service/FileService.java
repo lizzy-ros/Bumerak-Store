@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.exception.FileException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -22,11 +23,14 @@ public class FileService {
     public String store(MultipartFile file) {
 
         String newFileName = generateUniqueName(file);
-
         try {
+            Path uploadPath = Paths.get("uploads");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
             InputStream inputStream = file.getInputStream();
-            Path filePath = Paths.get("uploads").resolve(newFileName);
-            Files.copy(inputStream,filePath);
+            Path filePath = uploadPath.resolve(newFileName);
+            Files.copy(inputStream, filePath);
             return newFileName; // El nombre del archivo almacenado
         } catch (IOException e) {
             log.error("Error al leer/guardar archivo", e);

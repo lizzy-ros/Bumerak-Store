@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="raw">
+        <div class="col">
+
+    @if (productos) {
+        <h1 class="mt-5 mb-5">Pantalla detalle de {{productos.name}}</h1>
+        <p>{{productos.id}}{{productos.name}}</p>
+    
+        <button class="btn btn-success" [routerLink]="['/productos', productos.id , 'update']">Editar producto</button>
+    }
+        </div>
+    </div>
+</div>
